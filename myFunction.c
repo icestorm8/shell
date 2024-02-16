@@ -45,7 +45,8 @@ char **splitArgument(char *str)
 void getLocation()
 {
     char location[BUFF_SIZE];
-
+    char cpName[BUFF_SIZE];
+    gethostname(cpName, BUFF_SIZE);
     if (getcwd(location, BUFF_SIZE) == NULL)
     {
         puts("Error");
@@ -54,7 +55,7 @@ void getLocation()
     {
         bold();
         blue();
-        puts(location);
+        printf("%s:%s$",cpName, location);
         reset();
     }
 }

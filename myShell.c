@@ -83,6 +83,6 @@ void welcome()
    
    blue();
    puts("==================== written in c ======================");
-   puts("==================== by shaked t =======================\n");
+   puts("============ https://github.com/icestorm8 ==============\n");
    reset();
 }
