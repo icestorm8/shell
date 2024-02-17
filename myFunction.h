@@ -38,4 +38,5 @@ char* getInputFromUser();
  */
 char** splitArgument(char*);
 
+
 void getLocation();

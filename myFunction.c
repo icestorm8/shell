@@ -5,17 +5,17 @@ char *getInputFromUser()
     char ch;
     int size = 1;
     int index = 0;
-    char *str = (char *)malloc(size * sizeof(char));
-    while ((ch = getchar()) != '\n')
+    char *str = (char *)malloc(size * sizeof(char)); // get more space dynamically
+    while ((ch = getchar()) != '\n') // until enter - scan another char
     {
-        *(str + index) = ch;
-        size++;
+        *(str + index) = ch; // save in address (start+char number/count)
+        size++; 
         index++;
-        str = (char *)realloc(str, size * sizeof(char));
+        str = (char *)realloc(str, size * sizeof(char)); // ask for more space for existing allocated space - increase by 1;
     }
-    *(str + index) = '\0';
+    *(str + index) = '\0'; // if enter was pressed - end of string - add '\0' to symbolize end of string
 
-    return str;
+    return str; // return user's input
 }
 // עליכם לממש את הפונקציה strtok כלומר שהפונקציה הנ"ל תבצע בדיוק אותו הדבר רק בלי השימוש בפונקציה strtok
 char **splitArgument(char *str)
@@ -46,7 +46,9 @@ void getLocation()
 {
     char location[BUFF_SIZE];
     char cpName[BUFF_SIZE];
+    
     gethostname(cpName, BUFF_SIZE);
+  
     if (getcwd(location, BUFF_SIZE) == NULL)
     {
         puts("Error");
@@ -55,7 +57,7 @@ void getLocation()
     {
         bold();
         blue();
-        printf("%s:%s$",cpName, location);
+        printf("%s:%s$ ", cpName, location);
         reset();
     }
 }

@@ -7,32 +7,32 @@ int main()
 
     while (1)
     {
-        getLocation();
-        char *input = getInputFromUser();
+        getLocation(); // printing path and cp name
+        char *input = getInputFromUser(); // getting string from user
         // cp\0<file>\0<file>\0
         // cp <file> <file>\0
         // [cp, <file>, <file> ]
         // [input,input+3,input+10]
 
-        char **arg = splitArgument(input);
+        char **arg = splitArgument(input); // spliting the string to arguments
         int i = 0;
-        while (*(arg + i) != NULL)
+        while (*(arg + i) != NULL)  // as long as there are more args(separate words) - keep priting each in separate lines
         {
             puts(arg[i]);
             i++;
         }
 
-        if (strcmp(input, "exit") == 0)
+        if (strcmp(input, "exit") == 0) // if the input entered equals "exit" - close shell
         {
-            free(arg);
-            free(input);
-            puts("log out");
-            break;
+            free(arg); // free cells in which args where saved
+            free(input); // free cells in which input was saved
+            puts("log out"); // print log out message
+            break; // breaking will exit the while which the return follows it
         }
 
 
 
-        
+        // "restart" - clean the space that input and args took - not relavant anymore
         free(arg);
         free(input);
     }
