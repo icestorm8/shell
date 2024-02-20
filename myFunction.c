@@ -44,6 +44,7 @@ char **splitArgument(char *str)
 //  ולאחר הדולר ניתן אפשרות למשתמש להזין מחרוזת מבלי שנרד שורה.
 void getLocation()
 {
+    // add user too before @
     char location[BUFF_SIZE];
     char cpName[BUFF_SIZE];
     
@@ -56,9 +57,14 @@ void getLocation()
     else
     {
         bold();
-        blue();
-        printf("%s:%s$ ", cpName, location);
+        green();
+        printf("%s@%s",getenv("USER"),cpName); // read that i shouldn't use environment variables here, but for now
         reset();
+        printf(":");
+        blue();
+        printf("%s", location);
+        reset();
+        printf("$ ");
     }
 }
 
