@@ -40,3 +40,4 @@ char** splitArgument(char*);
 
 
 void getLocation();
+void echo(char **arg);

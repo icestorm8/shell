@@ -68,6 +68,15 @@ void getLocation()
     }
 }
 
+void echo(char **arg){
+    // gets the arguments entered in the terminal and prints them
+    while(*(++arg)!= NULL){
+        // as long as next arg (starting with next cause first is echo(?) is not null - print it)
+        printf("%s ", *arg);
+    }
+    puts(""); // new line at the end of print
+}
+
 
 // בכל שינוי יש לבצע קומיט מתאים העבודה מחייבת עבודה עם גיט.
 // ניתן להוסיף פונקציות עזר לתוכנית רק לשים לב שלא מוסיפים את חתימת הפונקציה לקובץ הכותרות
