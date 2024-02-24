@@ -42,3 +42,6 @@ void getLocation();
 
 void logout(char*);
 void echo(char**);
+
+
+char** splitString(char*);
