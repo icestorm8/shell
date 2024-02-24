@@ -38,6 +38,7 @@ char* getInputFromUser();
  */
 char** splitArgument(char*);
 
-
 void getLocation();
-void echo(char **arg);
+
+void logout(char*);
+void echo(char**);

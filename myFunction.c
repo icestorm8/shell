@@ -65,7 +65,16 @@ void getLocation()
         printf("%s", location);
         reset();
         printf("$ ");
+        boldOff();
     }
+}
+
+
+void logout(char *input)
+{
+    free(input); // free cells in which input was saved
+    puts("log out"); // print log out message
+    exit(EXIT_SUCCESS); // breaking will exit the while which the return follows it EXIT_SUCCESS = 0
 }
 
 void echo(char **arg){
@@ -76,6 +85,8 @@ void echo(char **arg){
     }
     puts(""); // new line at the end of print
 }
+
+
 
 
 // בכל שינוי יש לבצע קומיט מתאים העבודה מחייבת עבודה עם גיט.

@@ -13,13 +13,14 @@ int main()
         // cp <file> <file>\0
         // [cp, <file>, <file> ]
         // [input,input+3,input+10]
+        // MAYBE CONCIDER CREATING A FUNCTION THAT CHECKS THIS FOR EACH WORD WE PASS TO IT
+        // SO I WOULDN'T REPEAT IT TOO MANY TIMES
+
         if (strcmp(input, "exit") == 0) // if the input entered equals "exit" - close shell
         {
-            free(input); // free cells in which input was saved
-            puts("log out"); // print log out message
-            exit(EXIT_SUCCESS); // breaking will exit the while which the return follows it
+            logout(input);
         }
-
+        
         char **arg = splitArgument(input); // spliting the string to arguments
         
         if(strcmp(input, "echo")== 0|| strncmp(input, "echo ", 5) == 0){
