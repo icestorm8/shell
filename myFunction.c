@@ -36,7 +36,8 @@ char **splitArgument(char *str)
     //     argumnts = (char **)realloc(argumnts,size * sizeof(char *));
     // }
     // *(argumnts + (index+1)) = NULL;
-    char** arguments = splitArgument(str);
+   
+    char** arguments = (char**) splitString(str);
     
     return arguments;
 }
@@ -69,7 +70,6 @@ void getLocation()
         boldOff();
     }
 }
-
 
 void logout(char *input)
 {
@@ -121,15 +121,15 @@ char **splitString(char* str){
 
 
     
-    // check
-    for (int i = 0; i < size; i++)
-    {
-        printf("\n%d: %s\n", i,substrings[i]);
+    // // check
+    // for (int i = 0; i < size; i++)
+    // {
+    //     printf("\n%d: %s\n", i,substrings[i]);
        
-        // puts(a);
+    //     // puts(a);
         
-        /* code */
-    }
+    //     /* code */
+    // }
     
     
     return substrings;

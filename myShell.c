@@ -9,7 +9,7 @@ int main()
     {
         getLocation(); // printing path and cp name
         char *input = getInputFromUser(); // getting string from user
-        splitString(input);
+        splitArgument(input);
         puts("running");
         // cp\0<file>\0<file>\0
         // cp <file> <file>\0
