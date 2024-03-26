@@ -22,22 +22,23 @@ char **splitArgument(char *str)
 {
     // str = cp file file file
     //[cp,file,file,file,NULL]
-    char *subStr;
-    int size = 2;
-    int index = 0;
-    subStr = strtok(str, " ");
-    char **argumnts = (char **)malloc(size * sizeof(char *));
-    *(argumnts + index) = subStr;
-    while ((subStr = strtok(NULL, " ")) != NULL)
-    {
-        size++;
-        index++;
-        *(argumnts + index) = subStr;
-        argumnts = (char **)realloc(argumnts,size * sizeof(char *));
-    }
-    *(argumnts + (index+1)) = NULL;
-
-    return argumnts;
+    // char *subStr;
+    // int size = 2;
+    // int index = 0;
+    // subStr = strtok(str, " ");
+    // char **argumnts = (char **)malloc(size * sizeof(char *));
+    // *(argumnts + index) = subStr;
+    // while ((subStr = strtok(NULL, " ")) != NULL)
+    // {
+    //     size++;
+    //     index++;
+    //     *(argumnts + index) = subStr;
+    //     argumnts = (char **)realloc(argumnts,size * sizeof(char *));
+    // }
+    // *(argumnts + (index+1)) = NULL;
+    char** arguments = splitArgument(str);
+    
+    return arguments;
 }
 // בפונקציה הנ"ל קיבלנו את הנתיב ממנו אנחנו מריצים את התוכנית שלנו
 //  עליכם לשדרג את הנראות של הנתיב כך ש-בתחילת הנתיב יופיע שם המחשב (כמו בטרמינל המקורי) בסוף יופיע הסימן דולר
@@ -89,54 +90,50 @@ void echo(char **arg){
 
 char **splitString(char* str){
     // str is at first the pointer to the beggining of the string (first letter)
-    // int size = 1;
-    // char **splited = (char **)malloc(size * sizeof(char *));
-    // int count = 0;
     // as long as we didn't get to the end of the string
-    char *startP = str;
     int size = 1;
-    int index = 0;
-    int subCount = 1;
-    char **subStrings = (char**)malloc(subCount*sizeof(char)); // if space wasn't found ill still have an array of 1 string
-    char *current =(char*)malloc(size*sizeof(char));
-    while(*(startP+index) != '\0'){
-        // if its a space = split
-        
-        if(*startP == ' '){
-            *startP = '\0' ;
-            size++;
-            *current = (char*)realloc(current, size*sizeof(char)); // increase by one
-            current = startP;
-            // the substring ended
-            // add to char[][]
-            subCount++;
-            if(subCount == 1){
-                // pass the something to the something
-            }
-            else{
-                
-                **subStrings = (char**)realloc(subStrings, subCount*sizeof(char));
-            }
-            
-           
-
-            printf("%s\n", startP + 1); // Print the substrin
+    char** substrings = (char**)malloc(size*sizeof(char*));
+    // char* startP = str; // SAVE POINTER
+    substrings[0] = str; // SAVE START ADDRESS OF FIRST WORD(STRING)
+    size++;
+    while(*str){
+        if(*str == ' '){ // IF SPACE WAS FOUND
+        *str = '\0'; // REPLACE CURRENT CHAR WITH NULL POINTER
+        str++; // MOVE TO NEXT CHAR
+        substrings = (char**) realloc(substrings, (size)*sizeof(char*));
+       
+        substrings[size-1] = str;
+        size++;
+        // INCREASE SIZE OF SUBSTRING ARRAY
+        // INSERT STARTP ADDRES INTO ARRAY OF SUBSTRINGS
         }
         else{
-            if(index != 0){
-                current = startP; // the idea is to pass the first char of the string to the current substring i save
-            }
-            else{
-                // allocate space for another char in the current substring, increase size of current substring array
-                size++;
-               *current = (char*)realloc(current, size*sizeof(char)); // increase by one
-                current = startP;
-            }
-
+            str++;
         }
-        startP++; // next char in string
     }
-    return NULL;
+    
+    
+    substrings =(char**) realloc(substrings, size*sizeof(char*));
+   
+    // printf("size: %d", size);
+    // IF STRING WAS ENDED (/0) - ADD NULL TO THE END OF THE SUBSTRING ARRAY (INCREASE THAN ADD)
+    substrings[size-1] = NULL;
+
+
+    
+    // check
+    for (int i = 0; i < size; i++)
+    {
+        printf("\n%d: %s\n", i,substrings[i]);
+       
+        // puts(a);
+        
+        /* code */
+    }
+    
+    
+    return substrings;
+    
 }
 
 // בכל שינוי יש לבצע קומיט מתאים העבודה מחייבת עבודה עם גיט.
