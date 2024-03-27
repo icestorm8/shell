@@ -24,20 +24,29 @@ char **splitArguments(char* str){
     int size = 1;
     char** substrings = (char**)malloc(size*sizeof(char*));
     // char* startP = str; // SAVE POINTER
-    substrings[0] = str; // SAVE START ADDRESS OF FIRST WORD(STRING)
-    size++;
+    // substrings[0] = str; // SAVE START ADDRESS OF FIRST WORD(STRING)
+    // size++;
     while(*str){
         if(*str == ' '){ // IF SPACE WAS FOUND
         *str = '\0'; // REPLACE CURRENT CHAR WITH NULL POINTER
         str++; // MOVE TO NEXT CHAR
-        substrings = (char**) realloc(substrings, (size)*sizeof(char*));
-       
-        substrings[size-1] = str;
-        size++;
+        
+        if(*str != ' '){
+            substrings = (char**) realloc(substrings, (size)*sizeof(char*));
+            substrings[size-1] = str;
+            size++;
+        }
+        // else{
+        //     str++;
+        // }
         // INCREASE SIZE OF SUBSTRING ARRAY
         // INSERT STARTP ADDRES INTO ARRAY OF SUBSTRINGS
         }
         else{
+            if(size == 1){
+                substrings[0] = str; // SAVE START ADDRESS OF FIRST WORD(STRING)
+                size++;
+            }
             str++;
         }
     }
@@ -49,14 +58,14 @@ char **splitArguments(char* str){
     substrings[size-1] = NULL;
 
     // check
-    // for (int i = 0; i < size; i++)
-    // {
-    //     printf("\n%d: %s\n", i,substrings[i]);
+    for (int i = 0; i < size; i++)
+    {
+        printf("\n%d: '%s'\n", i,substrings[i]);
        
-    //     // puts(a);
+        // puts(a);
         
-    //     /* code */
-    // }
+        /* code */
+    }
     
     return substrings;
     
@@ -92,9 +101,10 @@ void getLocation()
     }
 }
 
-void logout(char *input)
+void logout(char *input, char **arg)
 {
     free(input); // free cells in which input was saved - do i need to free the arg array too if it contains pointers to input?
+    free(arg);
     puts("log out"); // print log out message
     exit(EXIT_SUCCESS); // breaking will exit the while which the return follows it EXIT_SUCCESS = 0
 }

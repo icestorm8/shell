@@ -10,6 +10,8 @@ int main()
         getLocation(); // printing path and cp name
         char *input = getInputFromUser(); // getting string from user
         char **arg = splitArguments(input); // spliting the string to arguments
+        char *command = arg[0];
+        // char command = arg[0];
         puts("running");
         // cp\0<file>\0<file>\0
         // cp <file> <file>\0
@@ -18,18 +20,17 @@ int main()
         // MAYBE CONCIDER CREATING A FUNCTION THAT CHECKS THIS FOR EACH WORD WE PASS TO IT
         // SO I WOULDN'T REPEAT IT TOO MANY TIMES
 
-        if (strcmp(input, "exit") == 0) // if the input entered equals "exit" - close shell
+        if (strcmp(command, "exit") == 0) // if the input entered equals "exit" - close shell
         {
-            logout(input);
+            logout(input, arg); // freeing input and arg at logout (were created using malloc), command wasn't
         }
         
-        
-        puts(input);
-        if(strcmp(input, "echo") == 0|| strncmp(input, "echo ", 5) == 0){
+        puts(command);
+        if(strcmp(command, "echo") == 0|| strncmp(command, "echo ", 5) == 0){
             // doesn't work if has any amount of spaces before the command
             echo(arg);
         }
-        else if(strcmp(input, "cd")== 0 || strncmp(input, "cd ", 3)==0){
+        else if(strcmp(command, "cd")== 0 || strncmp(command, "cd ", 3)==0){
             // create cd command and edit conditions
         }
     

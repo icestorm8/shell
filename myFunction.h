@@ -40,7 +40,7 @@ char** splitArguments(char*);
 
 void getLocation();
 
-void logout(char*);
+void logout(char*, char**);
 void echo(char**);
 
 
