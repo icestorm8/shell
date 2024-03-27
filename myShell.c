@@ -9,7 +9,7 @@ int main()
     {
         getLocation(); // printing path and cp name
         char *input = getInputFromUser(); // getting string from user
-        splitArgument(input);
+        char **arg = splitArguments(input); // spliting the string to arguments
         puts("running");
         // cp\0<file>\0<file>\0
         // cp <file> <file>\0
@@ -23,9 +23,9 @@ int main()
             logout(input);
         }
         
-        char **arg = splitArgument(input); // spliting the string to arguments
         
-        if(strcmp(input, "echo")== 0|| strncmp(input, "echo ", 5) == 0){
+        puts(input);
+        if(strcmp(input, "echo") == 0|| strncmp(input, "echo ", 5) == 0){
             // doesn't work if has any amount of spaces before the command
             echo(arg);
         }

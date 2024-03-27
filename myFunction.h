@@ -16,11 +16,11 @@ char* getInputFromUser();
 // cp file file
 // [cp,file,file]
 /**
- * Splits a string into individual tokens based on whitespace.
+ * Splits a string into individual words based on whitespace.
  * 
- * This function takes a string as input and tokenizes it based on whitespace
- * characters (space, tab, newline). It dynamically allocates memory for an
- * array of strings to store the tokens. The caller is responsible for freeing
+ * This function takes a string as input and splits it based on whitespace
+ * characters (space). It dynamically allocates memory for an
+ * array of strings to store the pointers to the first char in each word. The caller is responsible for freeing
  * the memory allocated for the array and its elements when it's no longer needed.
  * 
  * @param input A pointer to the string to be split.
@@ -36,7 +36,7 @@ char* getInputFromUser();
  * @warning The caller is responsible for freeing the memory allocated for
  *          the returned array and its elements using free().
  */
-char** splitArgument(char*);
+char** splitArguments(char*);
 
 void getLocation();
 
@@ -44,4 +44,4 @@ void logout(char*);
 void echo(char**);
 
 
-char** splitString(char*);
+// char** splitString(char*);

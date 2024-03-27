@@ -17,30 +17,51 @@ char *getInputFromUser()
 
     return str; // return user's input
 }
-// עליכם לממש את הפונקציה strtok כלומר שהפונקציה הנ"ל תבצע בדיוק אותו הדבר רק בלי השימוש בפונקציה strtok
-char **splitArgument(char *str)
-{
-    // str = cp file file file
-    //[cp,file,file,file,NULL]
-    // char *subStr;
-    // int size = 2;
-    // int index = 0;
-    // subStr = strtok(str, " ");
-    // char **argumnts = (char **)malloc(size * sizeof(char *));
-    // *(argumnts + index) = subStr;
-    // while ((subStr = strtok(NULL, " ")) != NULL)
-    // {
-    //     size++;
-    //     index++;
-    //     *(argumnts + index) = subStr;
-    //     argumnts = (char **)realloc(argumnts,size * sizeof(char *));
-    // }
-    // *(argumnts + (index+1)) = NULL;
-   
-    char** arguments = (char**) splitString(str);
+
+char **splitArguments(char* str){
+    // str is at first the pointer to the beggining of the string (first letter)
+    // as long as we didn't get to the end of the string
+    int size = 1;
+    char** substrings = (char**)malloc(size*sizeof(char*));
+    // char* startP = str; // SAVE POINTER
+    substrings[0] = str; // SAVE START ADDRESS OF FIRST WORD(STRING)
+    size++;
+    while(*str){
+        if(*str == ' '){ // IF SPACE WAS FOUND
+        *str = '\0'; // REPLACE CURRENT CHAR WITH NULL POINTER
+        str++; // MOVE TO NEXT CHAR
+        substrings = (char**) realloc(substrings, (size)*sizeof(char*));
+       
+        substrings[size-1] = str;
+        size++;
+        // INCREASE SIZE OF SUBSTRING ARRAY
+        // INSERT STARTP ADDRES INTO ARRAY OF SUBSTRINGS
+        }
+        else{
+            str++;
+        }
+    }
     
-    return arguments;
+    substrings =(char**) realloc(substrings, size*sizeof(char*));
+   
+    // printf("size: %d", size);
+    // IF STRING WAS ENDED (/0) - ADD NULL TO THE END OF THE SUBSTRING ARRAY (INCREASE THAN ADD)
+    substrings[size-1] = NULL;
+
+    // check
+    // for (int i = 0; i < size; i++)
+    // {
+    //     printf("\n%d: %s\n", i,substrings[i]);
+       
+    //     // puts(a);
+        
+    //     /* code */
+    // }
+    
+    return substrings;
+    
 }
+
 // בפונקציה הנ"ל קיבלנו את הנתיב ממנו אנחנו מריצים את התוכנית שלנו
 //  עליכם לשדרג את הנראות של הנתיב כך ש-בתחילת הנתיב יופיע שם המחשב (כמו בטרמינל המקורי) בסוף יופיע הסימן דולר
 //  ולאחר הדולר ניתן אפשרות למשתמש להזין מחרוזת מבלי שנרד שורה.
@@ -73,13 +94,14 @@ void getLocation()
 
 void logout(char *input)
 {
-    free(input); // free cells in which input was saved
+    free(input); // free cells in which input was saved - do i need to free the arg array too if it contains pointers to input?
     puts("log out"); // print log out message
     exit(EXIT_SUCCESS); // breaking will exit the while which the return follows it EXIT_SUCCESS = 0
 }
 
 void echo(char **arg){
     // gets the arguments entered in the terminal and prints them
+    
     while(*(++arg)!= NULL){
         // as long as next arg (starting with next cause first is echo(?) is not null - print it)
         printf("%s ", *arg);
@@ -88,53 +110,6 @@ void echo(char **arg){
 }
 
 
-char **splitString(char* str){
-    // str is at first the pointer to the beggining of the string (first letter)
-    // as long as we didn't get to the end of the string
-    int size = 1;
-    char** substrings = (char**)malloc(size*sizeof(char*));
-    // char* startP = str; // SAVE POINTER
-    substrings[0] = str; // SAVE START ADDRESS OF FIRST WORD(STRING)
-    size++;
-    while(*str){
-        if(*str == ' '){ // IF SPACE WAS FOUND
-        *str = '\0'; // REPLACE CURRENT CHAR WITH NULL POINTER
-        str++; // MOVE TO NEXT CHAR
-        substrings = (char**) realloc(substrings, (size)*sizeof(char*));
-       
-        substrings[size-1] = str;
-        size++;
-        // INCREASE SIZE OF SUBSTRING ARRAY
-        // INSERT STARTP ADDRES INTO ARRAY OF SUBSTRINGS
-        }
-        else{
-            str++;
-        }
-    }
-    
-    
-    substrings =(char**) realloc(substrings, size*sizeof(char*));
-   
-    // printf("size: %d", size);
-    // IF STRING WAS ENDED (/0) - ADD NULL TO THE END OF THE SUBSTRING ARRAY (INCREASE THAN ADD)
-    substrings[size-1] = NULL;
-
-
-    
-    // // check
-    // for (int i = 0; i < size; i++)
-    // {
-    //     printf("\n%d: %s\n", i,substrings[i]);
-       
-    //     // puts(a);
-        
-    //     /* code */
-    // }
-    
-    
-    return substrings;
-    
-}
 
 // בכל שינוי יש לבצע קומיט מתאים העבודה מחייבת עבודה עם גיט.
 // ניתן להוסיף פונקציות עזר לתוכנית רק לשים לב שלא מוסיפים את חתימת הפונקציה לקובץ הכותרות
