@@ -28,19 +28,14 @@ char **splitArguments(char* str){
     // size++;
     while(*str){
         if(*str == ' '){ // IF SPACE WAS FOUND
-        *str = '\0'; // REPLACE CURRENT CHAR WITH NULL POINTER
-        str++; // MOVE TO NEXT CHAR
+            *str = '\0'; // REPLACE CURRENT CHAR WITH NULL POINTER
+            str++; // MOVE TO NEXT CHAR
         
-        if(*str != ' '){
-            substrings = (char**) realloc(substrings, (size)*sizeof(char*));
-            substrings[size-1] = str;
-            size++;
-        }
-        // else{
-        //     str++;
-        // }
-        // INCREASE SIZE OF SUBSTRING ARRAY
-        // INSERT STARTP ADDRES INTO ARRAY OF SUBSTRINGS
+            if(*str != ' '){
+                substrings = (char**) realloc(substrings, (size)*sizeof(char*));
+                substrings[size-1] = str;
+                size++;
+            }
         }
         else{
             if(size == 1){
@@ -53,19 +48,14 @@ char **splitArguments(char* str){
     
     substrings =(char**) realloc(substrings, size*sizeof(char*));
    
-    // printf("size: %d", size);
     // IF STRING WAS ENDED (/0) - ADD NULL TO THE END OF THE SUBSTRING ARRAY (INCREASE THAN ADD)
     substrings[size-1] = NULL;
 
     // check
-    for (int i = 0; i < size; i++)
-    {
-        printf("\n%d: '%s'\n", i,substrings[i]);
-       
-        // puts(a);
-        
-        /* code */
-    }
+    // for (int i = 0; i < size; i++)
+    // {
+    //     printf("\n%d: '%s'\n", i,substrings[i]);
+    // }
     
     return substrings;
     
@@ -105,7 +95,7 @@ void logout(char *input, char **arg)
 {
     free(input); // free cells in which input was saved - do i need to free the arg array too if it contains pointers to input?
     free(arg);
-    puts("log out"); // print log out message
+    puts("logged out"); // print log out message
     exit(EXIT_SUCCESS); // breaking will exit the while which the return follows it EXIT_SUCCESS = 0
 }
 
@@ -119,7 +109,79 @@ void echo(char **arg){
     puts(""); // new line at the end of print
 }
 
+void cd(char **arg)
+{
+    if (strncmp(arg[1], "\"", 1) != 0 && arg[2] != NULL){
+    // first arg doesn't start with " and there is a second arg
+        puts("-myShell: cd: too many arguments");
+        // return;
+    }
+    else if (strncmp(arg[1], "\"", 1) == 0) 
+    {
+        
+        // starts with " - look for arg that ends with "
+        // input =  cd "OneDrive - Ariel University"\0
+        // [cd, "OneDrive, - , Ariel, University", NULL]
+        int hasClosingQuotation = 0; // false till true
+        int index = 1;
+        while(arg[index] != NULL){
+            // check length of current word
+            // check if the end is " (even for the second arg(the first word after command))
+            
+            int length = strlen(arg[index]);
+            char lastChar = arg[index][length-1];
+          
+            if(lastChar == '\"'){
+                hasClosingQuotation = 1; // was found
+          
+                break; 
+            }
+            index++;
+        }
+     
+        if(!hasClosingQuotation){
+            puts("-myShell: cd: closing double quote wasn't found, invalid arguments");
+            return;
+        }else{
 
+            int totalLength = 1; // for null terminator at end of string!
+            for(int i = 1; i<=index; i++){
+                printf("%d - ", index);
+                totalLength += strlen(arg[i]) +1; // save space for word and space (Estimated space)
+            }
+
+            char *path = (char*) malloc(totalLength * sizeof(char));  
+            path[0] ='\0'; // init string path
+            for(int i = 1; i<=index; i++){
+                strcat(path, arg[i]);
+
+                if(i<index){
+                    strcat(path, " ");
+                }
+            }
+            
+            memmove(path, path + 1, strlen(path) - 2); // remove double quotes cause it sees that as part of the path (changing start and end of string)
+            path[strlen(path) - 2] = '\0';
+           
+            if (chdir(path) != 0){
+                printf("-myShell: cd: %s: No such file or directory\n", path);
+            }
+
+            free(path);
+
+        }
+   
+    }
+    else if (chdir(arg[1]) != 0){
+        printf("-myShell: cd: %s: No such file or directory\n", arg[1]);}
+    else{
+        return;
+    }
+}
+
+char **checkPath(char **arg){
+
+}
 
 // בכל שינוי יש לבצע קומיט מתאים העבודה מחייבת עבודה עם גיט.
 // ניתן להוסיף פונקציות עזר לתוכנית רק לשים לב שלא מוסיפים את חתימת הפונקציה לקובץ הכותרות

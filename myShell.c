@@ -10,30 +10,29 @@ int main()
         getLocation(); // printing path and cp name
         char *input = getInputFromUser(); // getting string from user
         char **arg = splitArguments(input); // spliting the string to arguments
-        char *command = arg[0];
-        // char command = arg[0];
-        puts("running");
+        char *command = arg[0]; // command is the first word allways. it'll always be the first in the array
+     
+        // puts("running...");
         // cp\0<file>\0<file>\0
         // cp <file> <file>\0
         // [cp, <file>, <file> ]
         // [input,input+3,input+10]
-        // MAYBE CONCIDER CREATING A FUNCTION THAT CHECKS THIS FOR EACH WORD WE PASS TO IT
-        // SO I WOULDN'T REPEAT IT TOO MANY TIMES
 
         if (strcmp(command, "exit") == 0) // if the input entered equals "exit" - close shell
         {
             logout(input, arg); // freeing input and arg at logout (were created using malloc), command wasn't
         }
         
-        puts(command);
-        if(strcmp(command, "echo") == 0|| strncmp(command, "echo ", 5) == 0){
-            // doesn't work if has any amount of spaces before the command
+        if(strcmp(command, "echo") == 0){
             echo(arg);
         }
-        else if(strcmp(command, "cd")== 0 || strncmp(command, "cd ", 3)==0){
+        else if(strcmp(command, "cd")== 0){
             // create cd command and edit conditions
+            cd(arg);
         }
-    
+        else{
+            printf("-myshell: command '%s' wasn't found\n", command);
+        }
 
         // "restart" - clean the space that input and args took - not relavant anymore
         free(arg);

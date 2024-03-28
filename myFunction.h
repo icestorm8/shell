@@ -42,6 +42,8 @@ void getLocation();
 
 void logout(char*, char**);
 void echo(char**);
+void cd(char**);
+void cp(char**);
 
 
 // char** splitString(char*);
