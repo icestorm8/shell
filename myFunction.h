@@ -37,6 +37,7 @@ char* getInputFromUser();
  *          the returned array and its elements using free().
  */
 char** splitArguments(char*);
+char *checkPath(char**);
 
 void getLocation();
 

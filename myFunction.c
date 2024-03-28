@@ -119,11 +119,37 @@ void cd(char **arg)
     else if (strncmp(arg[1], "\"", 1) == 0) 
     {
         
-        // starts with " - look for arg that ends with "
+            char* path = checkPath(arg);
+            if(path == NULL){
+                return; // means that there wasn't a closing double quote so i returned null to indicate
+            }
+           
+            if (chdir(path) != 0){
+                printf("-myShell: cd: %s: No such file or directory\n", path);
+                
+            }
+
+            if(path != NULL){
+                free(path);
+            }
+
+           
+
+    }
+    else if (chdir(arg[1]) != 0){
+        printf("-myShell: cd: %s: No such file or directory\n", arg[1]);}
+    else{
+        return;
+    }
+}
+
+char *checkPath(char **arg){
+    // starts with " - look for arg that ends with "
         // input =  cd "OneDrive - Ariel University"\0
         // [cd, "OneDrive, - , Ariel, University", NULL]
         int hasClosingQuotation = 0; // false till true
-        int index = 1;
+        int index = 2;
+        // check if three is a closing double quote - start with second arg since first could be only "
         while(arg[index] != NULL){
             // check length of current word
             // check if the end is " (even for the second arg(the first word after command))
@@ -141,12 +167,11 @@ void cd(char **arg)
      
         if(!hasClosingQuotation){
             puts("-myShell: cd: closing double quote wasn't found, invalid arguments");
-            return;
+            return NULL;
         }else{
 
             int totalLength = 1; // for null terminator at end of string!
             for(int i = 1; i<=index; i++){
-                printf("%d - ", index);
                 totalLength += strlen(arg[i]) +1; // save space for word and space (Estimated space)
             }
 
@@ -159,28 +184,12 @@ void cd(char **arg)
                     strcat(path, " ");
                 }
             }
-            
+           
             memmove(path, path + 1, strlen(path) - 2); // remove double quotes cause it sees that as part of the path (changing start and end of string)
             path[strlen(path) - 2] = '\0';
-           
-            if (chdir(path) != 0){
-                printf("-myShell: cd: %s: No such file or directory\n", path);
-            }
 
-            free(path);
-
+            return path;
         }
-   
-    }
-    else if (chdir(arg[1]) != 0){
-        printf("-myShell: cd: %s: No such file or directory\n", arg[1]);}
-    else{
-        return;
-    }
-}
-
-char **checkPath(char **arg){
-
 }
 
 // בכל שינוי יש לבצע קומיט מתאים העבודה מחייבת עבודה עם גיט.
