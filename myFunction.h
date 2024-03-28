@@ -37,7 +37,7 @@ char* getInputFromUser();
  *          the returned array and its elements using free().
  */
 char** splitArguments(char*);
-char *checkPath(char**);
+// char *checkPath(char**); -- thats a helper method so it shouldn't be here?
 
 void getLocation();
 
