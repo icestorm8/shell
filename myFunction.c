@@ -116,7 +116,7 @@ void echo(char **arg)
     puts(""); // new line at the end of print
 }
 
-char **checkPath(char **arg, int expectedPaths)
+char **checkPath(char **arg, int expectedPaths, const char *funcName)
 {
     char **paths = calloc(expectedPaths + 1, sizeof(char *)); // trying to change so it will fit more methods - one for null
     int currentPath = 0;                                      // start with first path
@@ -155,7 +155,7 @@ char **checkPath(char **arg, int expectedPaths)
 
             if (!hasClosingQuotation)
             {
-                puts("-myShell: cd: closing double quote wasn't found, invalid arguments");
+                printf("-myShell: %s: closing double quote wasn't found, invalid arguments\n", funcName);
 
                 free(paths);
                 return NULL;
@@ -199,11 +199,11 @@ char **checkPath(char **arg, int expectedPaths)
 
     if (arg[index] != NULL)
     {
-        puts("too many arguments");
+        printf("-myShell: %s: too many arguments\n", funcName);
     }
     else if (currentPath < expectedPaths)
     {
-        puts("missing arguments");
+        printf("-myShell: %s: missing arguments\n", funcName);
     }
     else
     {
@@ -231,13 +231,13 @@ void cd(char **arg)
     // {
     else
     {
-        char **paths = checkPath(arg, 1);
+        char **paths = checkPath(arg, 1, "cd");
         if (paths != NULL)
         {
 
             if (chdir(paths[0]) != 0)
             {
-                printf("-myShell: cd: %s: No such file or directory\n", arg[1]);
+                printf("-myShell: cd: %s: No such file or directory\n", paths[0]);
             }
             // free(paths[0]);
             free(paths);
@@ -249,28 +249,37 @@ void cp(char **arg)
 {
     char ch;
     FILE *src, *des;
-    if (strncmp(arg[1], "\"", 1) != 0 && arg[2] != NULL)
+    char **paths = checkPath(arg, 2, "cp");
+    if (paths != NULL)
+    { // AKA EXACT AMOUNT OF PATHS/ARGS
         // both has
         // none has - only 2 args, next is null, no " in any (otherwise - too many args)
         // one of them has (legally or not)
         // - first has opening but not closing - return "too many args"
         // - incase first has both, and second doesn't - return "too many args"
-        if ((src = fopen(arg[1], "r")) == NULL)
+        if ((src = fopen(paths[0], "r")) == NULL)
         {
-            puts("Erorr");
+            puts("-myShell: cp: Erorr - can't read src file");
             return;
         }
-    if ((des = fopen(arg[2], "w")) == NULL)
-    {
-        puts("Erorr");
+        if ((des = fopen(paths[1], "w")) == NULL)
+        {
+            puts("-myShell: cp: Erorr - can't write to dest file ");
+            fclose(src);
+            return;
+        }
+
+        while ((ch = fgetc(src)) != EOF)
+        {
+            fputc(ch, des);
+        }
+        puts("-myShell: cp: copied");
         fclose(src);
+        fclose(des);
+        free(paths);
+    }
+    else
+    {
         return;
     }
-
-    while ((ch = fgetc(src)) != EOF)
-    {
-        fputc(ch, des);
-    }
-    fclose(src);
-    fclose(des);
 }

@@ -7,11 +7,11 @@ int main()
 
     while (1)
     {
-        getLocation(); // printing path and cp name
-        char *input = getInputFromUser(); // getting string from user
+        getLocation();                      // printing path and cp name
+        char *input = getInputFromUser();   // getting string from user
         char **arg = splitArguments(input); // spliting the string to arguments
-        char *command = arg[0]; // command is the first word allways. it'll always be the first in the array
-     
+        char *command = arg[0];             // command is the first word allways. it'll always be the first in the array
+
         // puts("running...");
         // cp\0<file>\0<file>\0
         // cp <file> <file>\0
@@ -22,15 +22,23 @@ int main()
         {
             logout(input, arg); // freeing input and arg at logout (were created using malloc), command wasn't
         }
-        
-        if(strcmp(command, "echo") == 0){
+
+        if (strcmp(command, "echo") == 0)
+        {
             echo(arg);
         }
-        else if(strcmp(command, "cd")== 0){
+        else if (strcmp(command, "cd") == 0)
+        {
             // create cd command and edit conditions
             cd(arg);
         }
-        else{
+        else if (strcmp(command, "cp") == 0)
+        {
+            cp(arg);
+        }
+
+        else
+        {
             printf("-myshell: command '%s' wasn't found\n", command);
         }
 
@@ -41,7 +49,7 @@ int main()
     return 0;
 }
 // יש לכתוב את פונקציית הברוכים הבאים כרצונכם אבל קצת יותר ממה שמוצג מטה לדוגמא:
-//                     aSPY//YASa       
+//                     aSPY//YASa
 //              apyyyyCY//////////YCa       |
 //             sY//////YSpcs  scpCY//Pp     | Welcome to myShell
 //  ayp ayyyyyyySCP//Pp           syY//C    | Version 0.0.1
@@ -56,35 +64,34 @@ int main()
 //        cayCyayP//Ya              pY/Ya   |
 //         sY/PsY////YCc          aC//Yp    |
 //          sc  sccaCY//PCypaapyCP//YSs     |
-//                   spCPY//////YPSps       |  
-//                        ccaacs            |   
+//                   spCPY//////YPSps       |
+//                        ccaacs            |
 //                                          |                             using c
 void welcome()
 {
-    char *text[] ={
-" ██████  ██░ ██ ▓█████  ██▓     ██▓ ", 
-"▒██    ▒ ▓██░ ██▒▓█   ▀ ▓██▒    ▓██▒   ",
-"░ ▓██▄   ▒██▀▀██░▒███   ▒██░    ▒██░   " ,
-"  ▒   ██▒░▓█ ░██ ▒▓█  ▄ ▒██░    ▒██░  ",
-"▒██████▒▒░▓█▒░██▓░▒████▒░██████▒░██████▒",
-"▒ ▒▓▒ ▒ ░ ▒ ░░▒░▒░░ ▒░ ░░ ▒░▓  ░░ ▒░▓  ░",
-"░ ░▒  ░ ░ ▒ ░▒░ ░ ░ ░  ░░ ░ ▒  ░░ ░ ▒  ░",
-"░  ░  ░   ░  ░░ ░   ░     ░ ░     ░ ░   ",
-"      ░   ░  ░  ░   ░  ░    ░  ░    ░  ░", '\0'
-    } 
-  
-                                        
-;
-   blue();
-   puts("====================== welcome to =====================\n");
-   reset();
-   int i = 0;
-   do{
-    printf("\t%s\n", text[i++]);
-   }while((text[i]));
-   
-   blue();
-   puts("==================== written in c ======================");
-   puts("============ https://github.com/icestorm8 ==============\n");
-   reset();
+    char *text[] = {
+        " ██████  ██░ ██ ▓█████  ██▓     ██▓ ",
+        "▒██    ▒ ▓██░ ██▒▓█   ▀ ▓██▒    ▓██▒   ",
+        "░ ▓██▄   ▒██▀▀██░▒███   ▒██░    ▒██░   ",
+        "  ▒   ██▒░▓█ ░██ ▒▓█  ▄ ▒██░    ▒██░  ",
+        "▒██████▒▒░▓█▒░██▓░▒████▒░██████▒░██████▒",
+        "▒ ▒▓▒ ▒ ░ ▒ ░░▒░▒░░ ▒░ ░░ ▒░▓  ░░ ▒░▓  ░",
+        "░ ░▒  ░ ░ ▒ ░▒░ ░ ░ ░  ░░ ░ ▒  ░░ ░ ▒  ░",
+        "░  ░  ░   ░  ░░ ░   ░     ░ ░     ░ ░   ",
+        "      ░   ░  ░  ░   ░  ░    ░  ░    ░  ░", '\0'}
+
+    ;
+    blue();
+    puts("====================== welcome to =====================\n");
+    reset();
+    int i = 0;
+    do
+    {
+        printf("\t%s\n", text[i++]);
+    } while ((text[i]));
+
+    blue();
+    puts("==================== written in c ======================");
+    puts("============ https://github.com/icestorm8 ==============\n");
+    reset();
 }
