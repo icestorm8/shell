@@ -7,14 +7,16 @@ int main()
 
     while (1)
     {
-        int piping = 0; // |
-        // int pending = 0; // >>
-        // int riting = 0; // >
+        int piping = 0;                   // |
+        int pending = 0;                  // >>
+        int writing = 0;                  // >
         getLocation();                    // printing path and cp name
         char *input = getInputFromUser(); // getting string from user
 
         char **arg = splitArguments(input); // spliting the string to arguments
         piping = getToken(arg, "|");
+        pending = getToken(arg, ">>");
+        writing = getToken(arg, ">");
         if (arg != NULL)
         {
             char *command = arg[0]; // command is the first word allways. it'll always be the first in the array
@@ -30,9 +32,31 @@ int main()
                 logout(input, arg); // freeing input and arg at logout (were created using malloc), command wasn't
             }
 
-            if (strcmp(command, "echo") == 0)
+            if (piping != -1)
             {
-                echo(arg);
+                // printf("%d", piping); // print place were pipe is located in args
+                arg[piping] = NULL;
+                mypipe(arg, arg + piping + 1);
+                wait(NULL);
+            }
+
+            else if (strcmp(command, "echo") == 0)
+            {
+                printf("pending: %d, writing %d\n", pending, writing);
+                if (pending != -1)
+                {
+                    arg[pending] = NULL;
+                    echoppend(arg, arg + pending + 1);
+                }
+                else if (writing != -1)
+                {
+                    arg[writing] = NULL;
+                    echorite(arg, arg + writing + 1);
+                }
+                else
+                {
+                    echo(arg);
+                }
             }
             else if (strcmp(command, "cd") == 0)
             {
@@ -55,10 +79,7 @@ int main()
             {
                 ls(arg);
             }
-            else if (piping != -1)
-            {
-                printf("%d", piping); // print place were pipe is located in args
-                        }
+
             else
             {
                 printf("-myshell: command '%s' wasn't found\n", command);

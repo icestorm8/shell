@@ -46,5 +46,8 @@ void cp(char **);
 void delete(char **);
 void move(char **);
 int getToken(char **, const char *);
+void mypipe(char **, char **);
+void echoppend(char **, char **);
+void echorite(char **, char **);
 void ls(char **);
 // char** splitString(char*);

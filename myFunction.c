@@ -149,15 +149,21 @@ void echo(char **arg)
 
 char **checkPath(char **arg, int expectedPaths, const char *funcName)
 {
+
     char **paths = calloc(expectedPaths + 1, sizeof(char *)); // trying to change so it will fit more methods - one for null
-    int currentPath = 0;                                      // start with first path
+    if (arg[1] == NULL)
+    {
+        paths[0] = arg[0];
+        return paths; // in case got one word and it's not a command
+    }
+    int currentPath = 0; // start with first path
 
     // starts with " - look for arg that ends with "
     // input =  cd "OneDrive - Ariel University"\0
     // [cd, "OneDrive, - , Ariel, University", NULL]
     int hasClosingQuotation = 0; // false till true
-    int index = 1;
-    //
+    int index = 1;               // this chekes without the first cell - since its a command mostly. so when passing only a path itll fail
+
     while (currentPath < expectedPaths && arg[index] != NULL)
     {
         hasClosingQuotation = 0;
@@ -222,6 +228,7 @@ char **checkPath(char **arg, int expectedPaths, const char *funcName)
         }
         else
         {
+
             paths[currentPath] = arg[index];
         }
         currentPath++;
@@ -246,34 +253,36 @@ char **checkPath(char **arg, int expectedPaths, const char *funcName)
 
 void cd(char **arg)
 {
-    if (arg[1] == NULL)
-    {
-        puts("-myShell: cd: missing arguments");
-        return;
-    }
-    if (strncmp(arg[1], "\"", 1) != 0 && arg[2] != NULL) // wanted to not use the function if i can
-    {
-        // first arg doesn't start with " and there is a second arg
-        puts("-myShell: cd: too many arguments");
-        return;
-        //     // return;
-    }
-    // else if (strncmp(arg[1], "\"", 1) == 0)
+    // if (arg[1] == NULL)
     // {
-    else
+    //     puts("-myShell: cd: missing arguments");
+    //     return;
+    // }
+    // if (strncmp(arg[1], "\"", 1) != 0 && arg[2] != NULL) // wanted to not use the function if i can
+    // {
+    //     // first arg doesn't start with " and there is a second arg
+    //     puts("-myShell: cd: too many arguments");
+    //     return;
+    //     //     // return;
+    // }
+    // // else if (strncmp(arg[1], "\"", 1) == 0)
+    // // {
+    // else
+    // {
+    char **paths = checkPath(arg, 1, "cd");
+    if (paths != NULL)
     {
-        char **paths = checkPath(arg, 1, "cd");
-        if (paths != NULL)
-        {
 
-            if (chdir(paths[0]) != 0)
-            {
-                printf("-myShell: cd: %s: No such file or directory\n", paths[0]);
-            }
-            // free(paths[0]);
-            free(paths);
+        if (chdir(paths[0]) != 0)
+        {
+            printf("-myShell: cd: %s: No such file or directory\n", paths[0]);
         }
+        // free(paths[0]);
+        free(paths);
+        return;
     }
+    return;
+    // }
 }
 
 void cp(char **arg)
@@ -422,6 +431,107 @@ int getToken(char **arg, const char *token)
     }
     // for(int i = 0; i< sizeof)
     return -1;
+}
+
+// check this one! something get stuch when cd .. | cd shell (should say " cd: shell: No such file or directory" like in bash?)
+void mypipe(char **argv1, char **argv2)
+{
+    // int index = 0;
+    // while (argv1[index] != NULL)
+    // {
+    //     puts("hi");
+    //     puts(argv1[index]);
+    //     puts(argv2[index]);
+    //     index++;
+    // }
+    int fildes[2];
+    if (fork() == 0)
+    {
+        pipe(fildes);
+        if (fork() == 0)
+        {
+            /* first component of command line */
+            close(STDOUT_FILENO);
+            dup(fildes[1]);
+            close(fildes[1]);
+            close(fildes[0]);
+            /* stdout now goes to pipe */
+            /* child process does command */
+
+            execvp(argv1[0], argv1);
+        }
+        /* 2nd command component of command line */
+        close(STDIN_FILENO);
+        dup(fildes[0]);
+        close(fildes[0]);
+        close(fildes[1]);
+        /* standard input now comes from pipe */
+        puts(argv2[0]);
+        execvp(argv2[0], argv2);
+        puts("bye");
+    }
+}
+
+void echoppend(char **argv1, char **argv2)
+{
+    // [echo, hi , there, >> , path] // check that path is one arg, if not existing (file doesn't open - create new file)
+    // echo up to the >> and save to file
+
+    // this should get a path to file  (as filename)
+    // should also get the result of an echo command
+    char **filename = checkPath(argv2, 1, "echoppend"); // when passing this - it has no command so the function had to be changed to return a word if the arg array contain only one
+
+    if (filename == NULL)
+    {
+        return;
+    }
+
+    FILE *file = freopen(filename[0], "a+", stdout); // append - exists - addes to it, doesn't - creates new file
+    if (file == NULL)
+    {
+        puts("Error opening file");
+        free(filename);
+        return;
+    }
+
+    // Call the echo function with the provided arguments
+    echo(argv1);
+
+    // Close the redirected output
+    fclose(stdout);
+    fclose(file);
+    // stdout = fdopen(1, "w");
+    freopen("/dev/tty", "w", stdout); // back to default (/*for gcc, ubuntu*/ )
+    printf("Output written to file.txt\n");
+    free(filename);
+}
+
+void echorite(char **argv1, char **argv2)
+{
+    char **filename = checkPath(argv2, 1, "echowrite");
+    if (filename == NULL)
+    {
+        return;
+    }
+
+    FILE *file = freopen(filename[0], "w", stdout); // write - exists - addes to it, doesn't - creates new file
+    if (file == NULL)
+    {
+        puts("Error opening file");
+        free(filename);
+        return;
+    }
+    // fflush(stdout);
+    // Call the echo function with the provided arguments
+    echo(argv1);
+
+    // Close the redirected output
+    fclose(stdout);
+    fclose(file);
+    // stdout = fdopen(1, "w");
+    freopen("/dev/tty", "w", stdout); // back to default (/*for gcc, ubuntu*/ )
+    printf("Output written to file.txt\n");
+    free(filename);
 }
 // for checking move
 void ls(char **arg)
