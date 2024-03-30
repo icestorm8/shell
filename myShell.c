@@ -36,7 +36,10 @@ int main()
         {
             cp(arg);
         }
-
+        else if (strcmp(command, "delete") == 0)
+        {
+            delete (arg);
+        }
         else
         {
             printf("-myshell: command '%s' wasn't found\n", command);

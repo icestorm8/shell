@@ -45,6 +45,7 @@ void logout(char*, char**);
 void echo(char**);
 void cd(char**);
 void cp(char**);
+void delete(char**);
 
 
 // char** splitString(char*);

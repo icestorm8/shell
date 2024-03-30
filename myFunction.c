@@ -180,7 +180,7 @@ char **checkPath(char **arg, int expectedPaths, const char *funcName)
                         strcat(path, " ");
                     }
                 }
-
+                // "|hi threr my name is|"
                 memmove(path, path + 1, strlen(path) - 2); // remove double quotes cause it sees that as part of the path (changing start and end of string)
                 path[strlen(path) - 2] = '\0';
 
@@ -277,6 +277,24 @@ void cp(char **arg)
         fclose(src);
         fclose(des);
         free(paths);
+    }
+    else
+    {
+        return;
+    }
+}
+
+void delete(char **arg)
+{
+    char **paths = checkPath(arg, 1, "delete");
+    if (paths != NULL)
+    {
+        if (unlink(paths[0]) != 0)
+            printf("-myShell: delete: %s: No such file or directory\n", paths[0]);
+        else
+        {
+            puts("file deleted successfuly");
+        }
     }
     else
     {
