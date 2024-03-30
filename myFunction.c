@@ -1,4 +1,5 @@
 #include "myFunction.h"
+#include <dirent.h>
 
 char *getInputFromUser()
 {
@@ -18,15 +19,26 @@ char *getInputFromUser()
     return str; // return user's input
 }
 
+// maybe check for tabs and newlines as well (haven't yet)
 char **splitArguments(char *str)
 {
+    if (strlen(str) == 0 || str == NULL)
+    {
+        return NULL;
+    }
     // str is at first the pointer to the beggining of the string (first letter)
     // as long as we didn't get to the end of the string
     int size = 1;
     char **substrings = (char **)malloc(size * sizeof(char *));
+    if (substrings == NULL)
+    {
+        puts("something went wrong");
+        return NULL;
+    }
     // char* startP = str; // SAVE POINTER
     // substrings[0] = str; // SAVE START ADDRESS OF FIRST WORD(STRING)
     // size++;
+    char **temp;
     while (*str)
     {
         if (*str == ' ')
@@ -36,7 +48,18 @@ char **splitArguments(char *str)
 
             if (*str != ' ')
             {
-                substrings = (char **)realloc(substrings, (size) * sizeof(char *));
+
+                temp = (char **)realloc(substrings, (size) * sizeof(char *));
+                if (temp == NULL)
+                {
+                    puts("something went wrong");
+                    free(substrings);
+                    return NULL;
+                }
+                else
+                {
+                    substrings = temp;
+                }
                 substrings[size - 1] = str;
                 size++;
             }
@@ -52,15 +75,23 @@ char **splitArguments(char *str)
         }
     }
 
-    substrings = (char **)realloc(substrings, size * sizeof(char *));
-
+    temp = (char **)realloc(substrings, size * sizeof(char *));
+    if (temp == NULL)
+    {
+        puts("something went wrong");
+        free(substrings);
+        return NULL;
+    }
+    else
+    {
+        substrings = temp;
+    }
     // IF STRING WAS ENDED (/0) - ADD NULL TO THE END OF THE SUBSTRING ARRAY (INCREASE THAN ADD)
     substrings[size - 1] = NULL;
 
-    // check
     // for (int i = 0; i < size; i++)
     // {
-    //     printf("\n%d: '%s'\n", i,substrings[i]);
+    //     printf("\n%d: '%s'\n", i, substrings[i]);
     // }
 
     return substrings;
@@ -300,4 +331,117 @@ void delete(char **arg)
     {
         return;
     }
+}
+
+void move(char **arg)
+{
+    char **paths = checkPath(arg, 2, "move");
+    if (paths != NULL)
+    {
+
+        char *src = paths[0];  // name of file (like file.txt)
+        char *dest = paths[1]; // path to move file to
+        // i need to extract the file name to add to the destenation path
+
+        // check if there isn't already a file name at the end of the dir path (in case of renaming the file)
+        int isDir = 1;
+        DIR *dir;
+        dir = opendir(dest);
+        if (dir == NULL)
+        {
+            isDir = 0;
+        }
+        else
+        {
+            closedir(dir); // close dir
+        }
+
+        if (!isDir)
+        {
+            if (rename(src, dest) != 0)
+                puts("-myShell: move: No such file or directory");
+            else
+            {
+                printf("file moved from %s to %s successfuly\n", src, dest);
+            }
+            return;
+        }
+        char *fileName = strrchr(src, '/'); // find last slash before file name if there is one
+
+        if (fileName == NULL)
+        {
+            fileName = src;
+        }
+        else
+        {
+            fileName++; // POINTER IS OG TO LAST SLASH INDEX AND NOT TO START OF FILENAME
+        }
+
+        // find buffer size
+        int destLength = strlen(dest);
+        int fileNameLength = strlen(fileName);
+        int bufferSize = fileNameLength + 1 + destLength + 1; // 2 added for slash between path and file and /0
+        char *newDest = (char *)calloc(bufferSize, sizeof(char));
+        if (newDest == NULL)
+        {
+            // CALLOC DIDN'T WORK
+            puts("something went wrong");
+            return;
+        }
+        sprintf(newDest, "%s/%s", dest, fileName);
+        // add filename to end of dest (so, src and dest with filename at the end)
+        // find last "/" in file name (if there is any)
+        // add the name of the file to the end of the dest dir
+        puts(src);
+        puts(dest);
+        puts(newDest);
+        if (rename(src, newDest) != 0)
+            puts("-myShell: move: No such file or directory");
+        else
+        {
+            printf("file moved from %s to %s successfuly\n", src, dest);
+        }
+        free(newDest);
+    }
+    else
+    {
+        return;
+    }
+}
+
+int getToken(char **arg, const char *token)
+{ // token is a string - could be |, >, >>
+    int tokenIndex = 0;
+    while (arg[tokenIndex] != NULL)
+    {
+        if (strcmp(arg[tokenIndex], token) == 0)
+        {
+            return tokenIndex;
+        }
+        tokenIndex++;
+    }
+    // for(int i = 0; i< sizeof)
+    return -1;
+}
+// for checking move
+void ls(char **arg)
+{
+    char **paths = checkPath(arg, 1, "ls");
+    if (paths == NULL)
+    {
+        return;
+    }
+    DIR *dir;
+    struct dirent *entry;
+    dir = opendir(paths[0]);
+    if (dir == NULL)
+    {
+        perror("Error opening directory");
+        return;
+    }
+    while ((entry = readdir(dir)) != NULL)
+    {
+        printf("%s\n", entry->d_name);
+    }
+    closedir(dir);
 }

@@ -7,44 +7,67 @@ int main()
 
     while (1)
     {
-        getLocation();                      // printing path and cp name
-        char *input = getInputFromUser();   // getting string from user
+        int piping = 0; // |
+        // int pending = 0; // >>
+        // int riting = 0; // >
+        getLocation();                    // printing path and cp name
+        char *input = getInputFromUser(); // getting string from user
+
         char **arg = splitArguments(input); // spliting the string to arguments
-        char *command = arg[0];             // command is the first word allways. it'll always be the first in the array
+        piping = getToken(arg, "|");
+        if (arg != NULL)
+        {
+            char *command = arg[0]; // command is the first word allways. it'll always be the first in the array
 
-        // puts("running...");
-        // cp\0<file>\0<file>\0
-        // cp <file> <file>\0
-        // [cp, <file>, <file> ]
-        // [input,input+3,input+10]
+            // puts("running...");
+            // cp\0<file>\0<file>\0
+            // cp <file> <file>\0
+            // [cp, <file>, <file> ]
+            // [input,input+3,input+10]
 
-        if (strcmp(command, "exit") == 0) // if the input entered equals "exit" - close shell
-        {
-            logout(input, arg); // freeing input and arg at logout (were created using malloc), command wasn't
-        }
+            if (strcmp(command, "exit") == 0) // if the input entered equals "exit" - close shell
+            {
+                logout(input, arg); // freeing input and arg at logout (were created using malloc), command wasn't
+            }
 
-        if (strcmp(command, "echo") == 0)
-        {
-            echo(arg);
-        }
-        else if (strcmp(command, "cd") == 0)
-        {
-            // create cd command and edit conditions
-            cd(arg);
-        }
-        else if (strcmp(command, "cp") == 0)
-        {
-            cp(arg);
-        }
-        else if (strcmp(command, "delete") == 0)
-        {
-            delete (arg);
+            if (strcmp(command, "echo") == 0)
+            {
+                echo(arg);
+            }
+            else if (strcmp(command, "cd") == 0)
+            {
+                // create cd command and edit conditions
+                cd(arg);
+            }
+            else if (strcmp(command, "cp") == 0)
+            {
+                cp(arg);
+            }
+            else if (strcmp(command, "delete") == 0)
+            {
+                delete (arg);
+            }
+            else if (strcmp(command, "move") == 0)
+            {
+                move(arg);
+            }
+            else if (strcmp(command, "ls") == 0)
+            {
+                ls(arg);
+            }
+            else if (piping != -1)
+            {
+                printf("%d", piping); // print place were pipe is located in args
+                        }
+            else
+            {
+                printf("-myshell: command '%s' wasn't found\n", command);
+            }
         }
         else
         {
-            printf("-myshell: command '%s' wasn't found\n", command);
+            puts("-myShell: invalid input");
         }
-
         // "restart" - clean the space that input and args took - not relavant anymore
         free(arg);
         free(input);
