@@ -75,15 +75,18 @@ int main()
             {
                 move(arg);
             }
-            else if (strcmp(command, "ls") == 0)
-            {
-                ls(arg);
-            }
             else if (strcmp(command, "read") == 0)
             {
                 myRead(arg);
             }
-
+            else if (strcmp(command, "wordCount") == 0)
+            {
+                wordCount(arg);
+            }
+            else if (strcmp(command, "ls") == 0)
+            {
+                ls(arg);
+            }
             else
             {
                 printf("-myshell: command '%s' wasn't found\n", command);

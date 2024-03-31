@@ -562,13 +562,14 @@ void myRead(char **arg)
 
     if (file == NULL)
     {
-        printf("-myShell: read: could not open file %s", filename[0]);
+        printf("-myShell: read: could not open file '%s', file may not exist\n", filename[0]);
         free(filename);
         return;
     }
 
     // read one character at a time (like echo)
-    // print it to terminal
+    // and print it to terminal
+    // until getting to EOF - end of file mark
     char ch;
     while ((ch = fgetc(file)) != EOF)
         putchar(ch);
@@ -579,6 +580,75 @@ void myRead(char **arg)
     return;
 }
 
+void wordCount(char **arg)
+{
+    if (arg[1] == NULL)
+    {
+        // arg[1] should be -l / -w
+        puts("-myShell: wordCount: missing arguments");
+        return;
+    }
+    char *option = arg[1];
+    if (strcmp(option, "-l") != 0 && strcmp(option, "-w") != 0)
+    {
+        printf("-myShell: wordCount: invalid option %s\n", option);
+        return;
+    }
+    // try to open file from path/filename
+    char **filename = checkPath(arg, 2, "wordCount"); // arg[0] - command, arg[1] - filename
+
+    if (filename[1] == NULL)
+    {
+        puts("-myShell: wordCount: missing arguments");
+        return;
+    }
+    FILE *file = fopen(filename[1], "r");
+
+    if (file == NULL)
+    {
+        printf("-myShell: read: could not open file '%s', file may not exist\n", filename[1]);
+        free(filename);
+        return;
+    }
+    // if it exists and there was a success opening it - count spaces and new lines
+    char ch;
+
+    // not sure how to count since its right some of the times but in other not so much
+    int words = 0;
+    int lines = 0;
+    while ((ch = fgetc(file)) != EOF)
+    {
+        if (ch == ' ')
+        {
+            words++;
+        }
+        if (ch == '\n')
+        {
+            lines++;
+            words++;
+        }
+    }
+
+    if (strcmp(option, "-l") == 0)
+    {
+        // return count of new line
+        printf("%d\n", lines);
+    }
+    else
+    {
+        // return count of new line + count of spaces
+        printf("%d\n", words);
+    }
+
+    // read one character at a time (like echo)
+    // and print it to terminal
+    // until getting to EOF - end of file mark
+
+    // close the file
+    fclose(file);
+    free(filename);
+    return;
+}
 // for checking move
 void ls(char **arg)
 {
