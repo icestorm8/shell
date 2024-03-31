@@ -94,10 +94,10 @@ char **splitArguments(char *str)
     // IF STRING WAS ENDED (/0) - ADD NULL TO THE END OF THE SUBSTRING ARRAY (INCREASE THAN ADD)
     substrings[size - 1] = NULL;
 
-    for (int i = 0; i < size; i++)
-    {
-        printf("\n%d: '%s'\n", i, substrings[i]);
-    }
+    // for (int i = 0; i < size; i++)
+    // {
+    //     printf("\n%d: '%s'\n", i, substrings[i]);
+    // }
 
     return substrings;
 }
@@ -406,9 +406,9 @@ void move(char **arg)
         // add filename to end of dest (so, src and dest with filename at the end)
         // find last "/" in file name (if there is any)
         // add the name of the file to the end of the dest dir
-        puts(src);
-        puts(dest);
-        puts(newDest);
+        // puts(src);
+        // puts(dest);
+        // puts(newDest);
         if (rename(src, newDest) != 0)
             puts("-myShell: move: No such file or directory");
         else

@@ -42,7 +42,7 @@ int main()
 
             else if (strcmp(command, "echo") == 0)
             {
-                printf("pending: %d, writing %d\n", pending, writing);
+                // printf("pending: %d, writing %d\n", pending, writing);
                 if (pending != -1)
                 {
                     arg[pending] = NULL;
