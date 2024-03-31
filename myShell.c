@@ -79,6 +79,10 @@ int main()
             {
                 ls(arg);
             }
+            else if (strcmp(command, "read") == 0)
+            {
+                myRead(arg);
+            }
 
             else
             {

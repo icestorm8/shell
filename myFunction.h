@@ -49,5 +49,6 @@ int getToken(char **, const char *);
 void mypipe(char **, char **);
 void echoppend(char **, char **);
 void echorite(char **, char **);
+void myRead(char **); // /usr/include/unistd.h:371:16: note: previous declaration of ‘read’ with type ‘ssize_t(int,  void *, size_t)’ {aka ‘long int(int,  void *, long unsigned int)’}
 void ls(char **);
 // char** splitString(char*);

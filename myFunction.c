@@ -550,6 +550,35 @@ void echorite(char **argv1, char **argv2)
     free(filename);
 }
 
+void myRead(char **arg)
+{
+    if (arg[1] == NULL)
+    {
+        puts("-myShell: read: missing arguments");
+        return;
+    }
+    char **filename = checkPath(arg, 1, "read"); // arg[0] - command, arg[1] - filename
+    FILE *file = fopen(filename[0], "r");
+
+    if (file == NULL)
+    {
+        printf("-myShell: read: could not open file %s", filename[0]);
+        free(filename);
+        return;
+    }
+
+    // read one character at a time (like echo)
+    // print it to terminal
+    char ch;
+    while ((ch = fgetc(file)) != EOF)
+        putchar(ch);
+
+    // close the file
+    fclose(file);
+    free(filename);
+    return;
+}
+
 // for checking move
 void ls(char **arg)
 {
