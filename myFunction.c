@@ -46,7 +46,12 @@ char **splitArguments(char *str)
             *str = '\0'; // REPLACE CURRENT CHAR WITH NULL POINTER
             str++;       // MOVE TO NEXT CHAR
 
-            if (*str != ' ')
+            while (*str == ' ')
+            {
+                str++;
+            }
+            // if (*str != ' ')
+            if (*str != '\0')
             {
 
                 temp = (char **)realloc(substrings, (size) * sizeof(char *));
@@ -89,10 +94,10 @@ char **splitArguments(char *str)
     // IF STRING WAS ENDED (/0) - ADD NULL TO THE END OF THE SUBSTRING ARRAY (INCREASE THAN ADD)
     substrings[size - 1] = NULL;
 
-    // for (int i = 0; i < size; i++)
-    // {
-    //     printf("\n%d: '%s'\n", i, substrings[i]);
-    // }
+    for (int i = 0; i < size; i++)
+    {
+        printf("\n%d: '%s'\n", i, substrings[i]);
+    }
 
     return substrings;
 }
@@ -479,6 +484,11 @@ void echoppend(char **argv1, char **argv2)
 
     // this should get a path to file  (as filename)
     // should also get the result of an echo command
+    if (argv2[0] == NULL) // checking if there is a file name after the pending >>
+    {
+        puts("-myShell: echorite: missing arguments (no file name)");
+        return;
+    }
     char **filename = checkPath(argv2, 1, "echoppend"); // when passing this - it has no command so the function had to be changed to return a word if the arg array contain only one
 
     if (filename == NULL)
@@ -508,6 +518,12 @@ void echoppend(char **argv1, char **argv2)
 
 void echorite(char **argv1, char **argv2)
 {
+
+    if (argv2[0] == NULL)
+    {
+        puts("-myShell: echorite: missing arguments (no file name)");
+        return;
+    }
     char **filename = checkPath(argv2, 1, "echowrite");
     if (filename == NULL)
     {
@@ -533,6 +549,7 @@ void echorite(char **argv1, char **argv2)
     printf("Output written to file.txt\n");
     free(filename);
 }
+
 // for checking move
 void ls(char **arg)
 {
