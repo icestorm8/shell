@@ -19,7 +19,6 @@ char *getInputFromUser()
     return str; // return user's input
 }
 
-// maybe check for tabs and newlines as well (haven't yet)
 char **splitArguments(char *str)
 {
     if (strlen(str) == 0 || str == NULL)
@@ -102,9 +101,6 @@ char **splitArguments(char *str)
     return substrings;
 }
 
-// בפונקציה הנ"ל קיבלנו את הנתיב ממנו אנחנו מריצים את התוכנית שלנו
-//  עליכם לשדרג את הנראות של הנתיב כך ש-בתחילת הנתיב יופיע שם המחשב (כמו בטרמינל המקורי) בסוף יופיע הסימן דולר
-//  ולאחר הדולר ניתן אפשרות למשתמש להזין מחרוזת מבלי שנרד שורה.
 void getLocation()
 {
     // add user too before @
@@ -152,6 +148,7 @@ void echo(char **arg)
     puts(""); // new line at the end of print
 }
 
+// cheks paths, gets an array of arguments (char**), the amount of paths we expect to find and the function name that called it
 char **checkPath(char **arg, int expectedPaths, const char *funcName)
 {
 
@@ -258,22 +255,6 @@ char **checkPath(char **arg, int expectedPaths, const char *funcName)
 
 void cd(char **arg)
 {
-    // if (arg[1] == NULL)
-    // {
-    //     puts("-myShell: cd: missing arguments");
-    //     return;
-    // }
-    // if (strncmp(arg[1], "\"", 1) != 0 && arg[2] != NULL) // wanted to not use the function if i can
-    // {
-    //     // first arg doesn't start with " and there is a second arg
-    //     puts("-myShell: cd: too many arguments");
-    //     return;
-    //     //     // return;
-    // }
-    // // else if (strncmp(arg[1], "\"", 1) == 0)
-    // // {
-    // else
-    // {
     char **paths = checkPath(arg, 1, "cd");
     if (paths != NULL)
     {
@@ -287,7 +268,6 @@ void cd(char **arg)
         return;
     }
     return;
-    // }
 }
 
 void cp(char **arg)
@@ -441,15 +421,8 @@ int getToken(char **arg, const char *token)
 // check this one! something get stuch when cd .. | cd shell (should say " cd: shell: No such file or directory" like in bash?)
 void mypipe(char **argv1, char **argv2)
 {
-    // int index = 0;
-    // while (argv1[index] != NULL)
-    // {
-    //     puts("hi");
-    //     puts(argv1[index]);
-    //     puts(argv2[index]);
-    //     index++;
-    // }
     int fildes[2];
+
     if (fork() == 0)
     {
         pipe(fildes);
@@ -473,7 +446,6 @@ void mypipe(char **argv1, char **argv2)
         /* standard input now comes from pipe */
         puts(argv2[0]);
         execvp(argv2[0], argv2);
-        puts("bye");
     }
 }
 
@@ -649,6 +621,7 @@ void wordCount(char **arg)
     free(filename);
     return;
 }
+
 // for checking move
 void ls(char **arg)
 {
