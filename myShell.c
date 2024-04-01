@@ -87,6 +87,10 @@ int main()
             {
                 ls(arg);
             }
+            else if (strcmp(command, "help") == 0)
+            {
+                help();
+            }
             else
             {
                 printf("-myshell: command '%s' wasn't found\n", command);

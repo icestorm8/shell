@@ -622,6 +622,10 @@ void wordCount(char **arg)
     return;
 }
 
+void help()
+{
+    puts("available commands:\n\techo [arg ...]\n\techo [arg...] >> [arg...]\n\teacho [arg...] > [arg...]\n\twordCount [-l] [-w] <file>\n\t<command> [arg...] | <command> [arg...]\n\tcd <dir>\n\texit\n\thelp\n\tread <file>\n\tdelete <file>\n\tmove <file> <dir>");
+}
 // for checking move
 void ls(char **arg)
 {

@@ -185,3 +185,6 @@ void wordCount(char **);
 
 // prints the content of a dir, used for check - not my code
 void ls(char **);
+
+// prints all available commands
+void help();
