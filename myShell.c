@@ -8,14 +8,14 @@ int main()
     while (1)
     {
         int piping = 0;                   // |
-        int pending = 0;                  // >>
+        int eppending = 0;                // >>
         int writing = 0;                  // >
         getLocation();                    // printing path and cp name
         char *input = getInputFromUser(); // getting string from user
 
         char **arg = splitArguments(input); // spliting the string to arguments
         piping = getToken(arg, "|");
-        pending = getToken(arg, ">>");
+        eppending = getToken(arg, ">>");
         writing = getToken(arg, ">");
         if (arg != NULL)
         {
@@ -43,10 +43,10 @@ int main()
             else if (strcmp(command, "echo") == 0)
             {
                 // printf("pending: %d, writing %d\n", pending, writing);
-                if (pending != -1)
+                if (eppending != -1)
                 {
-                    arg[pending] = NULL;
-                    echoppend(arg, arg + pending + 1);
+                    arg[eppending] = NULL;
+                    echoppend(arg, arg + eppending + 1);
                 }
                 else if (writing != -1)
                 {
@@ -71,7 +71,7 @@ int main()
             {
                 delete (arg);
             }
-            else if (strcmp(command, "move") == 0)
+            else if (strcmp(command, "mv") == 0)
             {
                 move(arg);
             }
@@ -79,7 +79,7 @@ int main()
             {
                 myRead(arg);
             }
-            else if (strcmp(command, "wordCount") == 0)
+            else if (strcmp(command, "wc") == 0)
             {
                 wordCount(arg);
             }
